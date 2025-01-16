@@ -1,0 +1,49 @@
+em4itu razdwatri 19 female 70 184 lose 1.375 premium -275 118.555 63.2292 213.399
+1
+2025-12-05 1 cake 225 
+1
+2025-12-05 1 basketball 400 
+ivayla05 iiii 20 female 65 175 lose 1.375 premium -275 112.08 59.7757 201.743
+0
+0
+nadi 0805 20 female 54 165 maintain 1.725 premium 0 147.865 78.8613 266.157
+0
+0
+alex 12345 30 male 78 178 gain 1.55 standart 137.5 184.639 98.4741 332.35
+1
+2025-01-01 1 pizza 200 
+1
+2025-01-01 1 jumping 300 
+emi 1202 19 female 76 184 lose 1.375 Standart -137.5 131.917 70.3555 237.45
+1
+2025-01-01 1 pizza 200 
+0
+dani 1303 35 female 65 165 lose 1.55 premium -68.75 132.129 70.4688 237.832
+0
+0
+tedi 0707 16 male 76 195 gain 1.725 premium 68.75 214.694 114.503 386.449
+1
+2025-01-01 3 pizza 40 pasta 120 salad 150 
+2
+2025-07-07 1 run 50 
+2025-01-01 1 run 100 
+sasho 2712 46 male 93 183 lose 1.55 Premium -137.5 180.444 96.2368 324.799
+0
+1
+2025-01-15 1 fitnes 400 
+emilia emka 19 female 76 183 lose 1.375 Standard -137.5 131.917 70.3555 237.45
+0
+0
+disko ball 23 male 78 196 maintain 1.55 Premium 0 188.263 100.407 338.874
+0
+0
+az ti 19 female 76 183 lose 1.375 Premium -137.5 131.917 70.3555 237.45
+0
+0
+emka bademka 19 female 76 183 lose 1.375 Standard -550 106.135 56.6055 191.044
+0
+0
+Teodora1 Teodora123 19 Female 58 173 maintain 1.55 Premium 0 139.268 74.2762 250.682
+1
+2025-01-16 1 salad 210 
+0
