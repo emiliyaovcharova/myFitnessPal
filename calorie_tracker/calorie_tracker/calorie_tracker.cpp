@@ -46,7 +46,7 @@ vector<User> users;
 
 // Function to find a log entry by date
 vector<pair<string, double>>* findLogByDate(vector<LogEntry>& logs, const string& date) {
-    for (auto& log : logs) {
+    for (LogEntry& log : logs) {
         if (log.date == date) {
             return &log.entries;
         }
@@ -54,7 +54,6 @@ vector<pair<string, double>>* findLogByDate(vector<LogEntry>& logs, const string
     return nullptr; // Return null if no entry is found
 }
 
-// Function to load data from file
 // Function to load data from file
 void loadDataFromFile() {
     ifstream file("users_data.txt");
@@ -67,7 +66,7 @@ void loadDataFromFile() {
                 >> user.fatGrams >> user.carbGrams;
             if (file.fail()) break;
 
-            // Изчисляване на BMR и calorieIntake след зареждане
+            // Calculation of BMR and calorieIntake after loading
             user.bmr = (user.gender == "male")
                 ? (88.362 + (13.397 * user.weight) + (4.799 * user.height) - (5.677 * user.age))
                 : (447.593 + (9.247 * user.weight) + (3.098 * user.height) - (4.330 * user.age));
@@ -169,7 +168,7 @@ void updateUser(User& user) {
             cout << "Invalid choice. Please try again.\n";
         }
 
-        // Преизчисли BMR и calorieIntake след промяната
+        // Recalculate BMR and calorieIntake after the change
         user.bmr = (user.gender == "male")
             ? (88.362 + (13.397 * user.weight) + (4.799 * user.height) - (5.677 * user.age))
             : (447.593 + (9.247 * user.weight) + (3.098 * user.height) - (4.330 * user.age));
@@ -183,7 +182,7 @@ void updateUser(User& user) {
 
 // Function to check username uniqueness
 bool isUsernameUnique(const string& username) {
-    for (const auto& user : users) {
+    for (const User& user : users) {
         if (user.username == username) {
             return false;
         }
@@ -221,7 +220,7 @@ void loginUser() {
     cout << "Enter password: ";
     cin >> password;
 
-    for (auto& user : users) {
+    for (User& user : users) {
         if (user.username == username && user.password == password) {
             cout << "\nLogin successful! Welcome, " << username << "!" << endl;
             displayUserData(user);
@@ -235,28 +234,28 @@ void loginUser() {
 void saveDataToFile() {
     ofstream file("users_data.txt");
     if (file.is_open()) {
-        for (const auto& user : users) {
+        for (const User& user : users) {
             file << user.username << " " << user.password << " " << user.age << " "
                 << user.gender << " " << user.weight << " " << user.height << " "
                 << user.goal << " " << user.activityLevel << " " << user.accountType << " "
                 << user.deficitOrSurplus << " " << user.proteinGrams << " "
                 << user.fatGrams << " " << user.carbGrams << "\n";
 
-            // Записване на хранителния дневник
+            // Recording the food diary
             file << user.foodLog.size() << "\n";
-            for (const auto& log : user.foodLog) {
+            for (const LogEntry& log : user.foodLog) {
                 file << log.date << " " << log.entries.size() << " ";
-                for (const auto& entry : log.entries) {
+                for (const std::pair<std::string, double>& entry : log.entries) {
                     file << entry.first << " " << entry.second << " ";
                 }
                 file << "\n";
             }
 
-            // Записване на тренировъчния дневник
+            // Recording the training log
             file << user.workoutLog.size() << "\n";
             for (const auto& log : user.workoutLog) {
                 file << log.date << " " << log.entries.size() << " ";
-                for (const auto& entry : log.entries) {
+                for (const std::pair<std::string, double>& entry : log.entries) {
                     file << entry.first << " " << entry.second << " ";
                 }
                 file << "\n";
@@ -358,10 +357,10 @@ void addFood(User& user) {
     cin >> calories;
 
     bool found = false;
-    for (auto& log : user.foodLog) {
+    for (LogEntry& log : user.foodLog) {
         if (log.date == date) {
             log.entries.push_back({ foodName, calories });
-            log.totalCalories += calories; // Актуализация на обобщените калории
+            log.totalCalories += calories; // Summary Calorie Update
             found = true;
             break;
         }
@@ -393,10 +392,10 @@ void addWorkout(User& user) {
     cin >> caloriesBurned;
 
     bool found = false;
-    for (auto& log : user.workoutLog) {
+    for (LogEntry& log : user.workoutLog) {
         if (log.date == date) {
             log.entries.push_back({ workoutName, caloriesBurned });
-            log.totalCalories += caloriesBurned; // Актуализация на обобщените калории
+            log.totalCalories += caloriesBurned; // Summary Calorie Update
             found = true;
             break;
         }
@@ -425,36 +424,36 @@ void dailyReport(const User& user) {
     cout << "Enter date (YYYY-MM-DD): ";
     cin >> date;
 
-    // Сумиране на калориите от храната за дадената дата
-    for (const auto& log : user.foodLog) {
+    // Summing up the calories from food for a given date
+    for (const LogEntry& log : user.foodLog) {
         if (log.date == date) {
-            for (const auto& entry : log.entries) {
+            for (const std::pair<std::string,double>& entry : log.entries) {
                 totalFoodCalories += entry.second;
             }
             break;
         }
     }
 
-    // Сумиране на калориите от тренировките за дадената дата
-    for (const auto& log : user.workoutLog) {
+    // Summing up the calories from workouts for a given date
+    for (const LogEntry& log : user.workoutLog) {
         if (log.date == date) {
-            for (const auto& entry : log.entries) {
+            for (const std::pair<std::string, double>& entry : log.entries) {
                 totalWorkoutCalories += entry.second;
             }
             break;
         }
     }
 
-    // Калкулиране на дневния калориен баланс
+    // Calculating the daily calorie balance
     double netCalories = totalFoodCalories - totalWorkoutCalories;
 
-    // Показване на отчета
+    // Show the report
     cout << "\nReport for " << date << ":" << endl;
     cout << "Total food calories: " << totalFoodCalories << " kcal" << endl;
     cout << "Total workout calories: " << totalWorkoutCalories << " kcal" << endl;
     cout << "Net calorie balance: " << netCalories << " kcal" << endl;
 
-    // Сравнение с дневните нужди от калории
+    // Comparison with daily calorie needs
     const double EPSILON = 1e-9;
     double dailyCalorieNeeds = user.bmr * user.activityLevel + user.deficitOrSurplus;
     cout << "Daily calorie needs: " << dailyCalorieNeeds << " kcal" << endl;
@@ -486,14 +485,14 @@ int getValidMenuChoice() {
         cout << "\nChoose an option: ";
         cin >> choice;
 
-        // Проверка за валидност
+        // Validity check
         if (cin.fail() || choice < 1 || choice > 6) {
-            cin.clear(); // Изчистване на флага за грешка
-            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Изчистване на буфера
+            cin.clear(); // Clear the error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clearing the buffer
             cout << "Invalid input. Please enter a number between 1 and 6." << endl;
         }
         else {
-            break; // Въвеждането е валидно
+            break; // Entry is valid
         }
     } while (true);
 
@@ -530,7 +529,7 @@ void mainMenu() {
                 cout << "Enter username: ";
                 cin >> username;
                 bool userFound = false;
-                for (auto& user : users) {
+                for (User& user : users) {
                     if (user.username == username) {
                         addFood(user);
                         userFound = true;
@@ -547,12 +546,13 @@ void mainMenu() {
             break;
 
         case 4:
+
             if (!users.empty()) {
                 string username;
                 cout << "Enter username: ";
                 cin >> username;
                 bool userFound = false;
-                for (auto& user : users) {
+                for (User& user : users) {
                     if (user.username == username) {
                         addWorkout(user);
                         userFound = true;
@@ -575,7 +575,7 @@ void mainMenu() {
                 cout << "Enter username: ";
                 cin >> username;
                 bool userFound = false;
-                for (const auto& user : users) {
+                for (const User& user : users) {
                     if (user.username == username) {
                         dailyReport(user);
                         userFound = true;
@@ -598,10 +598,10 @@ void mainMenu() {
                 cin >> username;
 
                 bool userFound = false;
-                for (auto& user : users) {
+                for (User& user : users) {
                     if (user.username == username) {
-                        updateUser(user); // Извикване на функцията за промяна
-                        saveDataToFile(); // Запазване на промените във файла
+                        updateUser(user);
+                        saveDataToFile(); 
                         userFound = true;
                         break;
                     }

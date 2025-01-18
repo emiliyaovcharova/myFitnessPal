@@ -47,3 +47,6 @@ Teodora1 Teodora123 19 Female 58 173 maintain 1.55 Premium 0 139.268 74.2762 250
 1
 2025-01-16 1 salad 210 
 0
+emito 1234 19 female 76 183 lose 1.375 Premium -825 88.9478 47.4388 160.106
+0
+0
