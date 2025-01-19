@@ -50,3 +50,7 @@ Teodora1 Teodora123 19 Female 58 173 maintain 1.55 Premium 0 139.268 74.2762 250
 emito 1234 19 female 76 183 lose 1.375 Premium -825 88.9478 47.4388 160.106
 0
 0
+ovcharova emilia 19 female 75 200 lose 1.375 Premium -550 109.867 58.5955 197.76
+1
+2025-01-01 1 cheese 34 
+0

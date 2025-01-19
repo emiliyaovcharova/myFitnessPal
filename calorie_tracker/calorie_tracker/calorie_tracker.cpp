@@ -174,6 +174,12 @@ void updateUser(User& user) {
             : (447.593 + (9.247 * user.weight) + (3.098 * user.height) - (4.330 * user.age));
         user.calorieIntake = user.bmr * user.activityLevel + user.deficitOrSurplus;
 
+        // Recalculate macronutrients
+        user.calorieIntake = (user.bmr * user.activityLevel) + user.deficitOrSurplus;
+        user.proteinGrams = (user.calorieIntake * 0.25) / 4;
+        user.fatGrams = (user.calorieIntake * 0.30) / 9;
+        user.carbGrams = (user.calorieIntake * 0.45) / 4;
+
         cout << "Data updated successfully!\n";
     } while (choice != 5);
 }
