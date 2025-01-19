@@ -485,6 +485,32 @@ void dailyReport(const User& user) {
     }
 }
 
+void deleteAllLogsByDate(User& user, const string& date) {
+    // Deleting from the food diary
+    for (vector<LogEntry>::iterator it = user.foodLog.begin(); it != user.foodLog.end(); ++it) {
+        if (it->date == date) {
+            user.foodLog.erase(it);
+            cout << "Deleted all food entries for date " << date << ".\n";
+            break;
+        }
+    }
+
+    // Deleting from the training diary
+    for (vector<LogEntry>::iterator it = user.workoutLog.begin(); it != user.workoutLog.end(); ++it) {
+        if (it->date == date) {
+            user.workoutLog.erase(it);
+            cout << "Deleted all workout entries for date " << date << ".\n";
+            break;
+        }
+    }
+
+    // If there are no entries in any diary
+    if (user.foodLog.empty() && user.workoutLog.empty()) {
+        cout << "No logs found for date " << date << ".\n";
+    }
+}
+
+
 int getValidMenuChoice() {
     int choice;
     do {
@@ -492,10 +518,10 @@ int getValidMenuChoice() {
         cin >> choice;
 
         // Validity check
-        if (cin.fail() || choice < 1 || choice > 6) {
+        if (cin.fail() || choice < 0 || choice > 7) {
             cin.clear(); // Clear the error flag
             cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Clearing the buffer
-            cout << "Invalid input. Please enter a number between 1 and 6." << endl;
+            cout << "Invalid input. Please enter a number between 0 and 7." << endl;
         }
         else {
             break; // Entry is valid
@@ -518,6 +544,7 @@ void mainMenu() {
         cout << "4. Add Workout" << endl;
         cout << "5. Daily Report" << endl;
         cout << "6. Update User Data" << endl;
+        cout << "7. Delete All Logs For The Date" << endl;
         cout << "0. Exit" << endl;
         
         choice = getValidMenuChoice();
@@ -622,6 +649,38 @@ void mainMenu() {
             }
             break;
 
+        case 7: { // Delete all logs for a specific date
+            if (users.empty()) {
+                cout << "No users registered yet!" << endl;
+                break;
+            }
+
+            string username;
+            cout << "Enter username: ";
+            cin >> username;
+
+            bool userFound = false;
+            for (User& user : users) {
+                if (user.username == username) {
+                    string date;
+                    cout << "Enter date to delete all logs (YYYY-MM-DD): ";
+                    cin >> date;
+
+                    deleteAllLogsByDate(user, date); // Delete logs for this user
+                    saveDataToFile(); // Save changes
+                    userFound = true;
+                    break;
+                }
+            }
+
+            if (!userFound) {
+                cout << "User not found!" << endl;
+            }
+
+            break;
+        }
+
+        
         case 0:
             cout << "\nExiting the program. Goodbye!" << endl;
             break;
