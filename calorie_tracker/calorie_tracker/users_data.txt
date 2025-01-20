@@ -53,3 +53,12 @@ emito 1234 19 female 76 183 lose 1.375 Premium -825 88.9478 47.4388 160.106
 ovcharova emilia 19 female 75 200 lose 1.375 Premium -550 109.867 58.5955 197.76
 0
 0
+nadito 1234 20 female 54 160 maintain 1.55 Premium 0 131.364 70.0606 236.454
+0
+0
+bibito 1234 19 female 60 175 maintain 1.55 Standard 0 141.66 75.5518 254.987
+0
+0
+danito 1234 20 female 56 165 maintain 1.375 Standard 0 119.453 63.7081 215.015
+0
+0

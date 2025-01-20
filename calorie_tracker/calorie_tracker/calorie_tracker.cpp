@@ -330,6 +330,28 @@ void registerUser() {
     cout << "Enter goal (lose/maintain/gain): ";
     cin >> newUser.goal;
 
+    if (newUser.goal == "maintain") {
+        newUser.deficitOrSurplus = 0; // No calorie adjustment for maintenance
+        cout << "Goal set to maintain weight. No rate selection required.\n";
+    }
+    else {
+        cout << "\nChoose rate of change (0.25/0.5/0.75/1 kg per week): ";
+        double rate;
+        do {
+            cin >> rate;
+            if (cin.fail() || (rate != 0.25 && rate != 0.5 && rate != 0.75 && rate != 1.0)) {
+                cout << "Invalid rate! Please choose from (0.25, 0.5, 0.75, 1): ";
+                cin.clear(); // Clear error flag
+                cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
+            }
+            else {
+                break; // Valid rate entered
+            }
+        } while (true);
+
+        newUser.deficitOrSurplus = (newUser.goal == "lose") ? rate * -1100 : rate * 1100;
+    }
+
     int activeDays;
     cout << "Enter number of active days per week: ";
     cin >> activeDays;
@@ -353,15 +375,13 @@ void registerUser() {
         ? (88.362 + (13.397 * newUser.weight) + (4.799 * newUser.height) - (5.677 * newUser.age))
         : (447.593 + (9.247 * newUser.weight) + (3.098 * newUser.height) - (4.330 * newUser.age));
 
-    cout << "\nChoose rate of change (0.00/0.25/0.5/0.75/1 kg per week): ";
-    double rate;
-    cin >> rate;
-    newUser.deficitOrSurplus = (newUser.goal == "maintain") ? rate * 0 : (newUser.goal == "lose") ? rate * -1100 : (newUser.goal == "gain") ? rate * 1100 : 0;
+    
 
     newUser.calorieIntake = (newUser.bmr * newUser.activityLevel) + newUser.deficitOrSurplus;
     newUser.proteinGrams = (newUser.calorieIntake * 0.25) / 4;
     newUser.fatGrams = (newUser.calorieIntake * 0.30) / 9;
     newUser.carbGrams = (newUser.calorieIntake * 0.45) / 4;
+
 
     cout << "\nChoose account type (Standard/Premium): ";
     cin >> newUser.accountType;
