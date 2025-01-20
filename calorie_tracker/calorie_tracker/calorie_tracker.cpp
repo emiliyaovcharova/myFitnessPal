@@ -184,6 +184,36 @@ void updateUser(User& user) {
     } while (choice != 5);
 }
 
+bool isLeapYear(int year) {
+    return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+}
+
+bool isValidDate(const string& date) {
+    // Check if the string has the correct length (YYYY-MM-DD is 10 characters)
+    if (date.length() != 10) {
+        return false;
+    }
+
+    // Check the format (YYYY-MM-DD)
+    if (date[4] != '-' || date[7] != '-') {
+        return false;
+    }
+
+    // Extract year, month, and day as integers
+    int year = stoi(date.substr(0, 4));
+    int month = stoi(date.substr(5, 2));
+    int day = stoi(date.substr(8, 2));
+
+    // Validate the month and day ranges
+    if (year < 0 || month < 1 || month > 12 || day < 1) {
+        return false;
+    }
+
+    // Days in each month
+    int daysInMonth[] = { 31, isLeapYear(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+    return day <= daysInMonth[month - 1];
+}
 
 
 // Function to check username uniqueness
@@ -355,8 +385,15 @@ void addFood(User& user) {
     string date, foodName;
     double calories;
 
-    cout << "Enter date (YYYY-MM-DD): ";
-    cin >> date;
+    do {
+        cout << "Enter date (YYYY-MM-DD): ";
+        cin >> date;
+
+        if (!isValidDate(date)) {
+            cout << "Invalid date! Please enter a valid date (YYYY-MM-DD).\n";
+        }
+    } while (!isValidDate(date));
+
     cout << "Enter food name: ";
     cin >> foodName;
     cout << "Enter calories: ";
@@ -390,8 +427,15 @@ void addWorkout(User& user) {
     string date, workoutName;
     double caloriesBurned;
 
-    cout << "Enter date (YYYY-MM-DD): ";
-    cin >> date;
+    do {
+        cout << "Enter date (YYYY-MM-DD): ";
+        cin >> date;
+
+        if (!isValidDate(date)) {
+            cout << "Invalid date! Please enter a valid date (YYYY-MM-DD).\n";
+        }
+    } while (!isValidDate(date));
+
     cout << "Enter workout name: ";
     cin >> workoutName;
     cout << "Enter calories burned: ";
@@ -427,8 +471,14 @@ void dailyReport(const User& user) {
     double totalWorkoutCalories = 0.0;
 
     cout << "\n--- Daily Report ---" << endl;
-    cout << "Enter date (YYYY-MM-DD): ";
-    cin >> date;
+    do {
+        cout << "Enter date (YYYY-MM-DD): ";
+        cin >> date;
+
+        if (!isValidDate(date)) {
+            cout << "Invalid date! Please enter a valid date (YYYY-MM-DD).\n";
+        }
+    } while (!isValidDate(date));
 
     // Summing up the calories from food for a given date
     for (const LogEntry& log : user.foodLog) {
@@ -486,29 +536,39 @@ void dailyReport(const User& user) {
 }
 
 void deleteAllLogsByDate(User& user, const string& date) {
+    if (!isValidDate(date)) {
+        cout << "Invalid date! Please enter a valid date (YYYY-MM-DD).\n";
+        return;
+    }
+
+    bool foodLogFound = false;
+    bool workoutLogFound = false;
+
     // Deleting from the food diary
     for (vector<LogEntry>::iterator it = user.foodLog.begin(); it != user.foodLog.end(); ++it) {
         if (it->date == date) {
             user.foodLog.erase(it);
             cout << "Deleted all food entries for date " << date << ".\n";
+            foodLogFound = true;
             break;
         }
     }
 
-    // Deleting from the training diary
+    // Deleting from the workout diary
     for (vector<LogEntry>::iterator it = user.workoutLog.begin(); it != user.workoutLog.end(); ++it) {
         if (it->date == date) {
             user.workoutLog.erase(it);
             cout << "Deleted all workout entries for date " << date << ".\n";
+            workoutLogFound = true;
             break;
         }
     }
 
-    // If there are no entries in any diary
-    if (user.foodLog.empty() && user.workoutLog.empty()) {
+    if (!foodLogFound && !workoutLogFound) {
         cout << "No logs found for date " << date << ".\n";
     }
 }
+
 
 
 int getValidMenuChoice() {
@@ -666,7 +726,7 @@ void mainMenu() {
                     cout << "Enter date to delete all logs (YYYY-MM-DD): ";
                     cin >> date;
 
-                    deleteAllLogsByDate(user, date); // Delete logs for this user
+                    deleteAllLogsByDate(user, date); // Delete logs for the user
                     saveDataToFile(); // Save changes
                     userFound = true;
                     break;
@@ -675,10 +735,18 @@ void mainMenu() {
 
             if (!userFound) {
                 cout << "User not found!" << endl;
+                cout << "Press Enter to return to the main menu...";
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cin.get();
             }
 
             break;
         }
+
+
+
+
 
         
         case 0:
